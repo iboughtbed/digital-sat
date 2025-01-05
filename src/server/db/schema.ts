@@ -8,7 +8,7 @@ import {
   text,
   timestamp,
   varchar,
-  json
+  json,
 } from "drizzle-orm/pg-core";
 import { type AdapterAccount } from "next-auth/adapters";
 
@@ -22,17 +22,14 @@ import type { Test } from "~/types";
  */
 export const createTable = pgTableCreator((name) => `digital-sat_${name}`);
 
-export const tests = createTable(
-  "test",
-  {
-    id: serial("id").primaryKey(),
-    test: json().$type<Test>().notNull(),
-    createdAt: timestamp("created_at", { withTimezone: true })
-      .default(sql`CURRENT_TIMESTAMP`)
-      .notNull(),
-    updatedAt: timestamp("updatedAt", { withTimezone: true }),
-  }
-)
+export const tests = createTable("test", {
+  id: serial("id").primaryKey(),
+  test: json("test").$type<Test>().notNull(),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .default(sql`CURRENT_TIMESTAMP`)
+    .notNull(),
+  updatedAt: timestamp("updatedAt", { withTimezone: true }),
+});
 
 // export const posts = createTable(
 //   "post",
@@ -92,7 +89,7 @@ export const accounts = createTable(
       columns: [account.provider, account.providerAccountId],
     }),
     userIdIdx: index("account_userId_idx").on(account.userId),
-  })
+  }),
 );
 
 export const accountsRelations = relations(accounts, ({ one }) => ({
@@ -115,7 +112,7 @@ export const sessions = createTable(
   },
   (session) => ({
     userIdIdx: index("session_userId_idx").on(session.userId),
-  })
+  }),
 );
 
 export const sessionsRelations = relations(sessions, ({ one }) => ({
@@ -134,5 +131,5 @@ export const verificationTokens = createTable(
   },
   (vt) => ({
     compoundKey: primaryKey({ columns: [vt.identifier, vt.token] }),
-  })
+  }),
 );
