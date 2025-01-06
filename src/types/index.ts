@@ -1,18 +1,25 @@
-export type Test = {
-  type: "verbal" | "math";
-  duration: number; 
-  questions: Question[];
-}
+export type VerbalTest = {
+  type: "verbal";
+  // duration?: number;
+  questions: VerbalQuestion[];
+};
 
-export type Question = {
-  index: number;
-  type: "multiple-choice" | "free-response";
-  prompt: string;
-  options?: QuestionOption[];
-  // answer?: string | number
-}
+export type VerbalQuestion = {
+  question: string;
+  options: string[];
+  answer: string;
+};
 
-export type QuestionOption = {
-  text: string;
-  isAnswer: boolean;
-}
+export type MathTest = {
+  type: "math";
+  questions: MathQuestion[];
+};
+
+export type MathQuestion = {
+  type: "mcq" | "free"; // mcq is multiple choice question
+  question: string;
+  options?: string[];
+  answer: string;
+};
+
+export type Test = MathTest | VerbalTest;
